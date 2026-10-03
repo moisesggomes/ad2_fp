@@ -16,29 +16,48 @@ for i in range(N):
 
 # Ler entradas 3
 entrada3 = input().split()
+
+temp = []
+for i in range(M):
+    temp.append(int(entrada3[i]))
+temp.sort()
+
 clientes = []
 for i in range(M):
     clientes.append({
-        "itens": entrada3[i], # Quantidade de itens
-        "em andamento": False, # Se o cliente esta sendo atendido
-        "processado": False # Se o cliente ja teve todos os itens processados
+        "itens": temp[i],   # Quantidade de itens
+        "em andamento": False,  # Se o cliente esta sendo atendido
+        "processado": False     # Se o cliente ja teve todos os itens processados
     })
 
 # Processamento
 tempo = 0
-while len(clientes) > 0:
+finalizado = False
+while not finalizado:
     for funcionario in funcionarios:
         if funcionario["ocupado"]:
             funcionario["processamento"] = funcionario["processamento"] - 1
+            if funcionario["processamento"] < 1:
+                clientes[funcionario["cliente"]]["em andamento"] = False
+                clientes[funcionario["cliente"]]["processado"] = True
+                funcionario["cliente"] = -1
+                funcionario["ocupado"] = False
         else:
-            funcionario["processamento"] = funcionario["tempo"] # Reseta o contador de tempo de processamento
+            # Busca um cliente que ainda nao foi atendido ( "processado" = False )
             for i in range(len(clientes)):
                 if not clientes[i]["em andamento"] and not clientes[i]["processado"]:
+                    funcionario["processamento"] = funcionario["tempo"] * clientes[i]["itens"] - 1 # Reseta o contador de tempo de processamento
                     funcionario["cliente"] = i
                     funcionario["ocupado"] = True
                     clientes[i]["em andamento"] = True
                     break
-            print()
+
+    atendidos = 0
+    for cliente in clientes:
+        if cliente["processado"]:
+            atendidos = atendidos + 1
+    if atendidos == M:
+        finalizado = True
 
     tempo = tempo + 1
 
