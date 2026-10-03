@@ -1,36 +1,33 @@
 def obterNivel(velocidade):
     if velocidade < 10:
         return 1
-    elif velocidade >= 10 or velocidade < 20:
+    elif velocidade >= 10 and velocidade < 20:
         return 2
     else:
         return 3
 
 def mediaNiveis(niveis):
-    media = 0
+    soma = 0
     for nivel in niveis:
-        media = media + nivel
-    return media / len(niveis)
+        soma = soma + nivel
+    return soma / len(niveis)
 
 def maiorNivel(niveis):
     maior = 0
-    for i in range(len(niveis[1:])):
+    for i in range(1, len(niveis)):
         if niveis[i] > niveis[maior]:
             maior = i
-    return maior
+    return niveis[maior]
 
 def menorNivel(niveis):
     menor = 0
-    for i in range(len(niveis[1:])):
+    for i in range(1, len(niveis)):
         if niveis[i] < niveis[menor]:
             menor = i
-    return menor
+    return niveis[menor]
 
 # Ler a entrada
 arquivo = open("lesmas.txt", "r")
-
-# Armazena as saidas futuras
-saidas = []
 
 terminado = False # checa se o arquivo chegou ao fim
 while not terminado:
@@ -50,8 +47,6 @@ while not terminado:
         media = mediaNiveis(niveis)
         maior = maiorNivel(niveis)
         menor = menorNivel(niveis)
-        saidas.append([ media, maior, menor ])
 
-# Imprime a saida
-for i in range(len(saidas)):
-    print(f"{saidas[i][0]:.2f} {saidas[i][1]} {saidas[i][2]}")
+        # Imprime as saidas
+        print(f"{media:.2f} {maior} {menor}")

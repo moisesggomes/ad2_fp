@@ -24,7 +24,7 @@ temp.sort()
 clientes = []
 for i in range(M):
     clientes.append({
-        "itens": temp[i],   # Quantidade de itens
+        "itens": temp[i],       # Quantidade de itens
         "em andamento": False,  # Se o cliente esta sendo atendido
         "processado": False     # Se o cliente ja teve todos os itens processados
     })
@@ -46,7 +46,7 @@ while not finalizado:
     for funcionario in funcionarios:
         if funcionario["ocupado"]:
             funcionario["processamento"] = funcionario["processamento"] - 1 # Processa um segundo
-            if funcionario["processamento"] < 1:
+            if funcionario["processamento"] < 1: # O funcionario terminou o processamento
                 clientes[funcionario["cliente"]]["em andamento"] = False
                 clientes[funcionario["cliente"]]["processado"] = True
                 funcionario["cliente"] = -1
