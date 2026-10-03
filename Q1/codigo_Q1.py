@@ -16,7 +16,6 @@ for i in range(N):
 
 # Ler entradas 3
 entrada3 = input().split()
-
 temp = []
 for i in range(M):
     temp.append(int(entrada3[i]))
@@ -46,7 +45,7 @@ while not finalizado:
             # Busca um cliente que ainda nao foi atendido ( "processado" = False )
             for i in range(len(clientes)):
                 if not clientes[i]["em andamento"] and not clientes[i]["processado"]:
-                    funcionario["processamento"] = funcionario["tempo"] * clientes[i]["itens"] - 1 # Reseta o contador de tempo de processamento
+                    funcionario["processamento"] = funcionario["tempo"] * clientes[i]["itens"] - 1 # Reseta o contador de tempo de processamento e gasta 1 segundo de processamento
                     funcionario["cliente"] = i
                     funcionario["ocupado"] = True
                     clientes[i]["em andamento"] = True
@@ -56,7 +55,7 @@ while not finalizado:
     for cliente in clientes:
         if cliente["processado"]:
             atendidos = atendidos + 1
-    if atendidos == M:
+    if atendidos == M: # Se todos os clientes foram atendidos
         finalizado = True
 
     tempo = tempo + 1
