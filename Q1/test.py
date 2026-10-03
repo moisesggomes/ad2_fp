@@ -1,15 +1,73 @@
-# dicionario = dict()
-# dicionario[0] = 10
-# dicionario[1] = 11
-# dicionario[2] = 12
+# Ler entradas 1
+entrada1 = input().split()
+N = int(entrada1[0]) # Numero de funcionarios nos caixas
+M = int(entrada1[1]) # Numero de clientes
 
-# print(dicionario)
-# for item in dicionario:
-#     dicionario[item] = dicionario[item] + 1
-# print(dicionario)
+# Ler entradas 2
+entrada2 = input().split()
+funcionarios = []
+for i in range(N):
+    funcionarios.append({
+        "processamento": int(entrada2[i]),  # Tempo restante para processamento
+        "cliente": -1,                      # Indice do cliente sendo processado
+        "ocupado": False,                   # Se o funcionario esta ocupado
+        "tempo": int(entrada2[i])           # Tempo necessario para cada item
+    })
 
-lista = [ 0, 1, 2, 3, 4, 5 ]
-print(lista)
-lista.pop(1)
-lista.pop(2)
-print(lista)
+# Ler entradas 3
+entrada3 = input().split()
+
+temp = []
+for i in range(M):
+    temp.append(int(entrada3[i]))
+temp.sort()
+
+clientes = []
+for i in range(M):
+    clientes.append({
+        "itens": temp[i],   # Quantidade de itens
+        "em andamento": False,  # Se o cliente esta sendo atendido
+        "processado": False     # Se o cliente ja teve todos os itens processados
+    })
+
+# Processamento
+tempo = 0
+finalizado = False
+
+while not finalizado:
+
+    # Primeiro, distribui clientes para todos os funcionários livres
+    for funcionario in funcionarios:
+        if not funcionario["ocupado"]:
+            for i in range(len(clientes)):
+                if not clientes[i]["em andamento"] and not clientes[i]["processado"]:
+                    funcionario["processamento"] = funcionario["tempo"] * clientes[i]["itens"]
+                    funcionario["cliente"] = i
+                    funcionario["ocupado"] = True
+                    clientes[i]["em andamento"] = True
+                    break
+
+    # Passou 1 segundo
+    tempo = tempo + 1
+
+    # Todos os funcionários ocupados processam 1 segundo
+    for funcionario in funcionarios:
+        if funcionario["ocupado"]:
+            funcionario["processamento"] = funcionario["processamento"] - 1
+
+            if funcionario["processamento"] == 0:
+                clientes[funcionario["cliente"]]["em andamento"] = False
+                clientes[funcionario["cliente"]]["processado"] = True
+                funcionario["cliente"] = -1
+                funcionario["ocupado"] = False
+
+    # Verifica se todos foram atendidos
+    atendidos = 0
+    for cliente in clientes:
+        if cliente["processado"]:
+            atendidos = atendidos + 1
+
+    if atendidos == M:
+        finalizado = True
+
+print(tempo)

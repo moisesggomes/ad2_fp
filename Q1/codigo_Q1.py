@@ -34,22 +34,23 @@ tempo = 0
 finalizado = False
 while not finalizado:
     for funcionario in funcionarios:
+        if not funcionario["ocupado"]: # Busca um cliente que ainda nao foi atendido ( "processado" = False )
+            for i in range(len(clientes)):
+                if not clientes[i]["em andamento"] and not clientes[i]["processado"]:
+                    funcionario["processamento"] = funcionario["tempo"] * clientes[i]["itens"]
+                    funcionario["cliente"] = i
+                    funcionario["ocupado"] = True
+                    clientes[i]["em andamento"] = True
+                    break
+
+    for funcionario in funcionarios:
         if funcionario["ocupado"]:
-            funcionario["processamento"] = funcionario["processamento"] - 1
+            funcionario["processamento"] = funcionario["processamento"] - 1 # Processa um segundo
             if funcionario["processamento"] < 1:
                 clientes[funcionario["cliente"]]["em andamento"] = False
                 clientes[funcionario["cliente"]]["processado"] = True
                 funcionario["cliente"] = -1
                 funcionario["ocupado"] = False
-        else:
-            # Busca um cliente que ainda nao foi atendido ( "processado" = False )
-            for i in range(len(clientes)):
-                if not clientes[i]["em andamento"] and not clientes[i]["processado"]:
-                    funcionario["processamento"] = funcionario["tempo"] * clientes[i]["itens"] - 1 # Reseta o contador de tempo de processamento e gasta 1 segundo de processamento
-                    funcionario["cliente"] = i
-                    funcionario["ocupado"] = True
-                    clientes[i]["em andamento"] = True
-                    break
 
     atendidos = 0
     for cliente in clientes:
